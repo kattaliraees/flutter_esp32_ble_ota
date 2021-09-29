@@ -86,10 +86,10 @@ dkms.conf
 .packages
 .pub-cache/
 .pub/
-./app_esp32_ota/build/
+app_esp32_ota/build/
 
 # Web related
-./app_esp32_ota/lib/generated_plugin_registrant.dart
+app_esp32_ota/lib/generated_plugin_registrant.dart
 
 # Symbolication related
 app.*.symbols
@@ -98,6 +98,6 @@ app.*.symbols
 app.*.map.json
 
 # Android Studio will place build artifacts here
-./app_esp32_ota/android/app/debug
-./app_esp32_ota/android/app/profile
-./app_esp32_ota/app/release
+app_esp32_ota/android/app/debug
+app_esp32_ota/android/app/profile
+app_esp32_ota/app/release
