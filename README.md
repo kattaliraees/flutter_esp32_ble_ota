@@ -1,2 +1,2 @@
-# flutter_esp32_ble_ota
-ESP32 OTA via BLE
+### Flutter App & esp-idf sample for performing esp32 ota via BLE
+
