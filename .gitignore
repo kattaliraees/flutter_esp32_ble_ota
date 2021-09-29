@@ -86,7 +86,7 @@ dkms.conf
 .packages
 .pub-cache/
 .pub/
-./app_esp32_ota//build/
+./app_esp32_ota/build/
 
 # Web related
 ./app_esp32_ota/lib/generated_plugin_registrant.dart
