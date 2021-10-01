@@ -1,0 +1,6 @@
+source "/Users/raeeskattali/esp-idf/components/app_update/Kconfig.projbuild"
+source "/Users/raeeskattali/esp-idf/components/bootloader/Kconfig.projbuild"
+source "/Users/raeeskattali/esp-idf/components/esp_rom/Kconfig.projbuild"
+source "/Users/raeeskattali/esp-idf/components/esptool_py/Kconfig.projbuild"
+source "/Users/raeeskattali/esp-idf/components/partition_table/Kconfig.projbuild"
+source "/Users/raeeskattali/raees/flutter_esp32_ble_ota/esp32-ota-firmware/main/Kconfig.projbuild"

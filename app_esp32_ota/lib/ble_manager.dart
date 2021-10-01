@@ -86,35 +86,37 @@ class BLEManager extends ChangeNotifier {
 
   void scanAndConnect() {
     if (_isScanning) {
-      return;
+      //return;
     }
     _isScanning = true;
     flutterReactiveBle.scanForDevices(
-        withServices: [_otaServiceUUID],
-        scanMode: ScanMode.lowLatency).listen((device) {
-      foundDevciceID = device.id;
-      connectionState = 1;
+        withServices: [], scanMode: ScanMode.lowLatency).listen((device) {
       _isScanning = false;
       //code for handling results
-
-      flutterReactiveBle
-          .connectToDevice(
-        id: foundDevciceID!,
-        servicesWithCharacteristicsToDiscover: {
-          Uuid.parse(foundDevciceID!): [_otaCharacteristicsUUID]
-        },
-        connectionTimeout: const Duration(seconds: 2),
-      )
-          .listen((connectionState) {
-        if (connectionState.connectionState ==
-            DeviceConnectionState.connected) {
-          this.connectionState = 1;
-        }
-        // Handle connection state updates
-        print(connectionState);
-      }, onError: (Object error) {
-        // Handle a possible error
-      });
+      print('device ${device.name}');
+      if (device.name == 'SAJDAH') {
+        foundDevciceID = device.id;
+        connectionState = 1;
+        print(device.serviceUuids[0].toString());
+        flutterReactiveBle
+            .connectToDevice(
+          id: foundDevciceID!,
+          servicesWithCharacteristicsToDiscover: {
+            Uuid.parse(foundDevciceID!): [_otaCharacteristicsUUID]
+          },
+          connectionTimeout: const Duration(seconds: 2),
+        )
+            .listen((connectionState) {
+          if (connectionState.connectionState ==
+              DeviceConnectionState.connected) {
+            this.connectionState = 1;
+          }
+          // Handle connection state updates
+          print(connectionState);
+        }, onError: (Object error) {
+          // Handle a possible error
+        });
+      }
     }, onError: (e) {
       print('Scanning failed');
     });
