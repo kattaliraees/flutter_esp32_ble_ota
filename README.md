@@ -1,9 +1,9 @@
-## Flutter App & esp-idf sample for performing esp32 ota via BLE
+## Flutter App & esp-idf sample for performing ESP32 OTA via BLE
 
 
 1MB OTA update time, iPhone SE 2, iOS 15 ---> 2 Minutes and 15 Seconds
 
-How it works
+#### How it works
 - One BLE Service with a Read, Write & Notify GATT Characteristic is created in ESP32 firmware.
 - Read of CHAR will return the current running firmware version
 - OTA update starts with a 5 bytes header packet
@@ -15,7 +15,7 @@ How it works
 - If file size match, it will begin OTA process at firmware side
 
 
-### Tested on
+#### Tested on
 ```
 boot: ESP-IDF v4.4-dev-2594-ga20df743f1 2nd stage bootloader
 boot: compile time 21:09:21  
