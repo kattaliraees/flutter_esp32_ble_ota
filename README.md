@@ -9,5 +9,5 @@
 - Write starts with a 5 bytes header packet
 - 5 Bytes [StartKey, OTASizeMSB, OTASizeByte, OTASizeByte, OTASizeLSB]
 - Following sending OTA bin file bytes in 512 byte writes
-- End Key
+- At the end send the OTA End Key
 
