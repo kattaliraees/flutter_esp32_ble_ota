@@ -33,6 +33,7 @@ class MyHomePage extends StatelessWidget {
     ble.scanAndConnect(() {
       if (ble.connectionStatus == BLEConnectionStatus.Connected) {
         connected = true;
+        ble.stopNotify = true;
       }
     });
     return Scaffold(
@@ -48,6 +49,7 @@ class MyHomePage extends StatelessWidget {
                 ble.scanAndConnect(() {
                   if (ble.connectionStatus == BLEConnectionStatus.Connected) {
                     connected = true;
+                    ble.stopNotify = true;
                     final updatedFirmwareVersion = ble.getFirmwareVersion();
                     print(updatedFirmwareVersion);
                   }
