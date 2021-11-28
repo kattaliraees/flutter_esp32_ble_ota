@@ -1,0 +1,2 @@
+/Users/apple/.espressif/tools/xtensa-esp32-elf/esp-2021r1-8.4.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-ar qc libhal.a CMakeFiles/__idf_hal.dir/wdt_hal_iram.c.obj CMakeFiles/__idf_hal.dir/mpu_hal.c.obj
+/Users/apple/.espressif/tools/xtensa-esp32-elf/esp-2021r1-8.4.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-ranlib libhal.a

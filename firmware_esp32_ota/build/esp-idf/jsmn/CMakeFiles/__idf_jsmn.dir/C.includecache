@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/apple/esp-idf/components/jsmn/include/jsmn.h
+stddef.h
+-
+
+/Users/apple/esp-idf/components/jsmn/src/jsmn.c
+jsmn.h
+/Users/apple/esp-idf/components/jsmn/src/jsmn.h
+
