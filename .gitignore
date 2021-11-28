@@ -53,7 +53,7 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-firmware_esp32_ota/build/
+firmware_esp32_ota/build/*
 
 # Miscellaneous
 *.class
