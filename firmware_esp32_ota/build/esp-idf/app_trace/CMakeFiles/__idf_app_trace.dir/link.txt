@@ -1,2 +1,0 @@
-/Users/apple/.espressif/tools/xtensa-esp32-elf/esp-2021r1-8.4.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-ar qc libapp_trace.a CMakeFiles/__idf_app_trace.dir/app_trace.c.obj CMakeFiles/__idf_app_trace.dir/app_trace_util.c.obj CMakeFiles/__idf_app_trace.dir/host_file_io.c.obj CMakeFiles/__idf_app_trace.dir/gcov/gcov_rtio.c.obj
-/Users/apple/.espressif/tools/xtensa-esp32-elf/esp-2021r1-8.4.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-ranlib libapp_trace.a

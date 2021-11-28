@@ -1,2 +1,0 @@
-/Users/apple/.espressif/tools/xtensa-esp32-elf/esp-2021r1-8.4.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-ar qc libesp32.a CMakeFiles/__idf_esp32.dir/cache_sram_mmu.c.obj CMakeFiles/__idf_esp32.dir/dport_access.c.obj CMakeFiles/__idf_esp32.dir/esp_himem.c.obj CMakeFiles/__idf_esp32.dir/spiram.c.obj CMakeFiles/__idf_esp32.dir/spiram_psram.c.obj
-/Users/apple/.espressif/tools/xtensa-esp32-elf/esp-2021r1-8.4.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-ranlib libesp32.a
