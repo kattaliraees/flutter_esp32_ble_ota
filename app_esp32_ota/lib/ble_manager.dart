@@ -88,11 +88,13 @@ class BLEProvider extends ChangeNotifier {
             }
 
             // Handle connection state updates
-          }, onError: (Object error) {
+          }, onError: (error) {
             connectionStatus = BLEConnectionStatus.FailedToConnect;
-            // Handle a possible error
+            print(error);
           });
-        }, onError: (err) {});
+        }, onError: (err) {
+          print(err);
+        });
       }
     });
   }
