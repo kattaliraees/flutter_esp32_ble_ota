@@ -124,7 +124,6 @@ gatt_svr_chr_access_sec_test(uint16_t conn_handle, uint16_t attr_handle,
             FILE *fp;
             fp = fopen(OTA_FILE_PATH, "ab");
             int command_key = gatt_svr_ota_write_buffer[0];
-            printf("%d - size %d", command_key);
             if (start_receive == 0 && command_key == BLE_OTA_START_WRITE && ota_buffer_size == 5)
             {
                 start_receive = 1;

@@ -133,7 +133,7 @@ class BLEProvider extends ChangeNotifier {
       ];
       final endKey = ')';
       int start = 0;
-      final chunkSize = 128;
+      final chunkSize = 514;
       int totalRead = chunkSize;
       bool isLastChunkSent = false;
 

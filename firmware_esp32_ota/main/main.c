@@ -419,7 +419,7 @@ void app_main(void)
     while (1)
     {
         ESP_LOGI(SDMMC_TAG, "main task");
-        vTaskDelay(100);
+        vTaskDelay(1000);
     }
 }
 

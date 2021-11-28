@@ -29,34 +29,34 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ble = BLEProvider();
-    bool connected = false;
-    ble.scanAndConnect(() {
-      if (ble.connectionStatus == BLEConnectionStatus.Connected) {
-        connected = true;
-        ble.stopNotify = true;
-      }
-    });
+    bool otaRunning = false;
+
     return Scaffold(
       body: Center(
         child: MaterialButton(
           child: Text('Start OTA'),
           color: Colors.blue,
           onPressed: () {
-            if (connected) {
-              ble.writeBytesToOTACharecteristicsWithNotify(() async {
-                await Future.delayed(
-                    Duration(seconds: 2)); //Wait for ESP32 to restart
-                ble.scanAndConnect(() {
-                  if (ble.connectionStatus == BLEConnectionStatus.Connected) {
-                    connected = true;
-                    ble.stopNotify = true;
-                    final updatedFirmwareVersion = ble.getFirmwareVersion();
-                    print(updatedFirmwareVersion);
-                  }
-                });
-                connected = false;
-              });
+            if (otaRunning) {
+              return;
             }
+            ble.scanAndConnect(() {
+              if (ble.connectionStatus == BLEConnectionStatus.Connected) {
+                otaRunning = true;
+                ble.writeBytesToOTACharecteristicsWithNotify(() async {
+                  await Future.delayed(
+                      Duration(seconds: 2)); //Wait for ESP32 to restart
+                  ble.scanAndConnect(() {
+                    if (ble.connectionStatus == BLEConnectionStatus.Connected) {
+                      otaRunning = false;
+                      ble.stopNotify = true;
+                      final updatedFirmwareVersion = ble.getFirmwareVersion();
+                      print(updatedFirmwareVersion);
+                    }
+                  });
+                });
+              }
+            });
           },
         ),
       ),
