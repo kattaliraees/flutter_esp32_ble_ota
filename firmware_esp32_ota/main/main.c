@@ -36,7 +36,6 @@
 #define MOUNT_POINT "/sdcard"
 #define SDMMC_TAG "SDMMC"
 
-
 void setup_sdmmc_interface();
 
 static const char *tag = "NimBLE_BLE_PRPH";
@@ -64,7 +63,7 @@ bleprph_print_conn_desc(struct ble_gap_conn_desc *desc)
                 desc->peer_id_addr.type);
     print_addr(desc->peer_id_addr.val);
     MODLOG_DFLT(INFO, " conn_itvl=%d conn_latency=%d supervision_timeout=%d "
-                "encrypted=%d authenticated=%d bonded=%d\n",
+                      "encrypted=%d authenticated=%d bonded=%d\n",
                 desc->conn_itvl, desc->conn_latency,
                 desc->supervision_timeout,
                 desc->sec_state.encrypted,
@@ -114,14 +113,14 @@ bleprph_advertise(void)
     fields.name_len = strlen(name);
     fields.name_is_complete = 1;
 
-    fields.uuids16 = (ble_uuid16_t[]) {
-        BLE_UUID16_INIT(GATT_SVR_SVC_ALERT_UUID)
-    };
+    fields.uuids16 = (ble_uuid16_t[]){
+        BLE_UUID16_INIT(GATT_SVR_SVC_ALERT_UUID)};
     fields.num_uuids16 = 1;
     fields.uuids16_is_complete = 1;
 
     rc = ble_gap_adv_set_fields(&fields);
-    if (rc != 0) {
+    if (rc != 0)
+    {
         MODLOG_DFLT(ERROR, "error setting advertisement data; rc=%d\n", rc);
         return;
     }
@@ -132,7 +131,8 @@ bleprph_advertise(void)
     adv_params.disc_mode = BLE_GAP_DISC_MODE_GEN;
     rc = ble_gap_adv_start(own_addr_type, NULL, BLE_HS_FOREVER,
                            &adv_params, bleprph_gap_event, NULL);
-    if (rc != 0) {
+    if (rc != 0)
+    {
         MODLOG_DFLT(ERROR, "error enabling advertisement; rc=%d\n", rc);
         return;
     }
@@ -159,20 +159,23 @@ bleprph_gap_event(struct ble_gap_event *event, void *arg)
     struct ble_gap_conn_desc desc;
     int rc;
 
-    switch (event->type) {
+    switch (event->type)
+    {
     case BLE_GAP_EVENT_CONNECT:
         /* A new connection was established or a connection attempt failed. */
         MODLOG_DFLT(INFO, "connection %s; status=%d ",
                     event->connect.status == 0 ? "established" : "failed",
                     event->connect.status);
-        if (event->connect.status == 0) {
+        if (event->connect.status == 0)
+        {
             rc = ble_gap_conn_find(event->connect.conn_handle, &desc);
             assert(rc == 0);
             bleprph_print_conn_desc(&desc);
         }
         MODLOG_DFLT(INFO, "\n");
 
-        if (event->connect.status != 0) {
+        if (event->connect.status != 0)
+        {
             /* Connection failed; resume advertising. */
             bleprph_advertise();
         }
@@ -215,7 +218,7 @@ bleprph_gap_event(struct ble_gap_event *event, void *arg)
 
     case BLE_GAP_EVENT_SUBSCRIBE:
         MODLOG_DFLT(INFO, "subscribe event; conn_handle=%d attr_handle=%d "
-                    "reason=%d prevn=%d curn=%d previ=%d curi=%d\n",
+                          "reason=%d prevn=%d curn=%d previ=%d curi=%d\n",
                     event->subscribe.conn_handle,
                     event->subscribe.attr_handle,
                     event->subscribe.reason,
@@ -253,38 +256,52 @@ bleprph_gap_event(struct ble_gap_event *event, void *arg)
         struct ble_sm_io pkey = {0};
         int key = 0;
 
-        if (event->passkey.params.action == BLE_SM_IOACT_DISP) {
+        if (event->passkey.params.action == BLE_SM_IOACT_DISP)
+        {
             pkey.action = event->passkey.params.action;
             pkey.passkey = 123456; // This is the passkey to be entered on peer
             ESP_LOGI(tag, "Enter passkey %d on the peer side", pkey.passkey);
             rc = ble_sm_inject_io(event->passkey.conn_handle, &pkey);
             ESP_LOGI(tag, "ble_sm_inject_io result: %d\n", rc);
-        } else if (event->passkey.params.action == BLE_SM_IOACT_NUMCMP) {
+        }
+        else if (event->passkey.params.action == BLE_SM_IOACT_NUMCMP)
+        {
             ESP_LOGI(tag, "Passkey on device's display: %d", event->passkey.params.numcmp);
             ESP_LOGI(tag, "Accept or reject the passkey through console in this format -> key Y or key N");
             pkey.action = event->passkey.params.action;
-            if (scli_receive_key(&key)) {
+            if (scli_receive_key(&key))
+            {
                 pkey.numcmp_accept = key;
-            } else {
+            }
+            else
+            {
                 pkey.numcmp_accept = 0;
                 ESP_LOGE(tag, "Timeout! Rejecting the key");
             }
             rc = ble_sm_inject_io(event->passkey.conn_handle, &pkey);
             ESP_LOGI(tag, "ble_sm_inject_io result: %d\n", rc);
-        } else if (event->passkey.params.action == BLE_SM_IOACT_OOB) {
+        }
+        else if (event->passkey.params.action == BLE_SM_IOACT_OOB)
+        {
             static uint8_t tem_oob[16] = {0};
             pkey.action = event->passkey.params.action;
-            for (int i = 0; i < 16; i++) {
+            for (int i = 0; i < 16; i++)
+            {
                 pkey.oob[i] = tem_oob[i];
             }
             rc = ble_sm_inject_io(event->passkey.conn_handle, &pkey);
             ESP_LOGI(tag, "ble_sm_inject_io result: %d\n", rc);
-        } else if (event->passkey.params.action == BLE_SM_IOACT_INPUT) {
+        }
+        else if (event->passkey.params.action == BLE_SM_IOACT_INPUT)
+        {
             ESP_LOGI(tag, "Enter the passkey through console in this format-> key 123456");
             pkey.action = event->passkey.params.action;
-            if (scli_receive_key(&key)) {
+            if (scli_receive_key(&key))
+            {
                 pkey.passkey = key;
-            } else {
+            }
+            else
+            {
                 pkey.passkey = 0;
                 ESP_LOGE(tag, "Timeout! Passing 0 as the key");
             }
@@ -313,7 +330,8 @@ bleprph_on_sync(void)
 
     /* Figure out address to use while advertising (no privacy for now) */
     rc = ble_hs_id_infer_auto(0, &own_addr_type);
-    if (rc != 0) {
+    if (rc != 0)
+    {
         MODLOG_DFLT(ERROR, "error determining address type; rc=%d\n", rc);
         return;
     }
@@ -338,14 +356,14 @@ void bleprph_host_task(void *param)
     nimble_port_freertos_deinit();
 }
 
-void
-app_main(void)
+void app_main(void)
 {
-    int rc;
+    int rc = 0;
 
     /* Initialize NVS — it is used to store PHY calibration data */
     esp_err_t ret = nvs_flash_init();
-    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
+    {
         ESP_ERROR_CHECK(nvs_flash_erase());
         ret = nvs_flash_init();
     }
@@ -377,7 +395,6 @@ app_main(void)
     ble_hs_cfg.sm_their_key_dist = 1;
 #endif
 
-
     rc = gatt_svr_init();
     assert(rc == 0);
 
@@ -392,7 +409,8 @@ app_main(void)
 
     /* Initialize command line interface to accept input from user */
     rc = scli_init();
-    if (rc != ESP_OK) {
+    if (rc != ESP_OK)
+    {
         ESP_LOGE(tag, "scli_init() failed");
     }
 
@@ -400,10 +418,9 @@ app_main(void)
 
     while (1)
     {
-        ESP_LOG_INFO("main task");
+        ESP_LOGI(SDMMC_TAG, "main task");
         vTaskDelay(100);
     }
-    
 }
 
 void setup_sdmmc_interface()
@@ -449,12 +466,12 @@ void setup_sdmmc_interface()
         if (ret == ESP_FAIL)
         {
             ESP_LOGE(SDMMC_TAG, "Failed to mount filesystem. "
-                          "If you want the card to be formatted, set the EXAMPLE_FORMAT_IF_MOUNT_FAILED menuconfig option.");
+                                "If you want the card to be formatted, set the EXAMPLE_FORMAT_IF_MOUNT_FAILED menuconfig option.");
         }
         else
         {
             ESP_LOGE(SDMMC_TAG, "Failed to initialize the card (%s). "
-                          "Make sure SD card lines have pull-up resistors in place.",
+                                "Make sure SD card lines have pull-up resistors in place.",
                      esp_err_to_name(ret));
         }
         return;

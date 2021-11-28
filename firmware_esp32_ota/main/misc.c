@@ -22,18 +22,17 @@
 /**
  * Utility function to log an array of bytes.
  */
-void
-print_bytes(const uint8_t *bytes, int len)
+void print_bytes(const uint8_t *bytes, int len)
 {
     int i;
 
-    for (i = 0; i < len; i++) {
+    for (i = 0; i < len; i++)
+    {
         MODLOG_DFLT(INFO, "%s0x%02x", i != 0 ? ":" : "", bytes[i]);
     }
 }
 
-void
-print_addr(const void *addr)
+void print_addr(const void *addr)
 {
     const uint8_t *u8p;
 

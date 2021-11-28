@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "stdio.h": "c",
-        "bleprph.h": "c"
+        "bleprph.h": "c",
+        "regex": "c"
     }
 }
