@@ -21,6 +21,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
+//Make stateful widget for proper implementation and use otaprogress notifier value for progress.
+//This is a very simple  & quick implementtion.
 class MyHomePage extends StatelessWidget {
   MyHomePage({Key? key}) : super(key: key);
 
@@ -29,7 +31,9 @@ class MyHomePage extends StatelessWidget {
     final ble = BLEProvider();
     bool connected = false;
     ble.scanAndConnect(() {
-      connected = true;
+      if (ble.connectionStatus == BLEConnectionStatus.Connected) {
+        connected = true;
+      }
     });
     return Scaffold(
       body: Center(
@@ -42,9 +46,11 @@ class MyHomePage extends StatelessWidget {
                 await Future.delayed(
                     Duration(seconds: 2)); //Wait for ESP32 to restart
                 ble.scanAndConnect(() {
-                  connected = true;
-                  final updatedFirmwareVersion = ble.getFirmwareVersion();
-                  print(updatedFirmwareVersion);
+                  if (ble.connectionStatus == BLEConnectionStatus.Connected) {
+                    connected = true;
+                    final updatedFirmwareVersion = ble.getFirmwareVersion();
+                    print(updatedFirmwareVersion);
+                  }
                 });
                 connected = false;
               });
