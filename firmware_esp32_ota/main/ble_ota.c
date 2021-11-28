@@ -62,7 +62,7 @@ void ota_begin()
     }
 
     FILE *fp;
-    fp = fopen("/sdcard/ota.bin", "rb");
+    fp = fopen(OTA_FILE_PATH, "rb");
     if (fp == NULL)
     {
         ESP_LOGE(TAG, "Failed to open OTA file for reading");
@@ -168,7 +168,7 @@ void ota_begin()
         task_fatal_error();
     }
     fclose(fp);
-    remove("/sdcard/ESP32_Firmware/sajdah_esp.bin");
+    remove(OTA_FILE_PATH);
     ESP_LOGI(TAG, "Prepare to restart system!");
     esp_restart();
     return ;

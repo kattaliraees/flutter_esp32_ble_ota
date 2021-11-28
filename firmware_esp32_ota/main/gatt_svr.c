@@ -39,7 +39,6 @@
  *       but can only be written over an encrypted connection.
  */
 
-int rc;
 static int start_receive = 0;
 static uint32_t total_size = 0;
 static uint16_t counter = 0;
@@ -55,7 +54,6 @@ static const ble_uuid128_t gatt_svr_chr_ota =
     BLE_UUID128_INIT(0xf6, 0x6d, 0xc9, 0x07, 0x71, 0x00, 0x16, 0xb0,
                      0xe1, 0x45, 0x7e, 0x89, 0x9e, 0x65, 0x3a, 0x5c);
 
-static uint8_t gatt_svr_sec_test_static_val;
 
 static int
 gatt_svr_chr_access_sec_test(uint16_t conn_handle, uint16_t attr_handle,
@@ -82,25 +80,7 @@ static const struct ble_gatt_svc_def gatt_svr_svcs[] = {
     },
 };
 
-static int
-gatt_svr_chr_write(struct os_mbuf *om, uint16_t min_len, uint16_t max_len,
-                   void *dst, uint16_t *len)
-{
-    uint16_t om_len;
-    int rc;
 
-    om_len = OS_MBUF_PKTLEN(om);
-    if (om_len < min_len || om_len > max_len) {
-        return BLE_ATT_ERR_INVALID_ATTR_VALUE_LEN;
-    }
-
-    rc = ble_hs_mbuf_to_flat(om, dst, max_len, len);
-    if (rc != 0) {
-        return BLE_ATT_ERR_UNLIKELY;
-    }
-
-    return 0;
-}
 
 static int
 gatt_svr_chr_access_sec_test(uint16_t conn_handle, uint16_t attr_handle,
@@ -108,7 +88,6 @@ gatt_svr_chr_access_sec_test(uint16_t conn_handle, uint16_t attr_handle,
                              void *arg)
 {
     const ble_uuid_t *uuid;
-    int rand_num;
     int rc;
 
     uuid = ctxt->chr->uuid;
@@ -141,7 +120,7 @@ gatt_svr_chr_access_sec_test(uint16_t conn_handle, uint16_t attr_handle,
             gatt_svr_ota_write_buffer = malloc(ota_buffer_size * sizeof(uint8_t));
             rc = ble_hs_mbuf_to_flat(ctxt->om, gatt_svr_ota_write_buffer, ota_buffer_size, NULL);
             FILE *fp;
-            fp = fopen("/sdcard/esp.bin", "ab" );
+            fp = fopen(OTA_FILE_PATH, "ab" );
             int command_key = gatt_svr_ota_write_buffer[0];
             if (start_receive == 0 && command_key == BLE_OTA_START_WRITE && ota_buffer_size == 5)
             {
@@ -152,7 +131,7 @@ gatt_svr_chr_access_sec_test(uint16_t conn_handle, uint16_t attr_handle,
                 gatt_svr_ota_write_buffer = NULL;
                 ble_gattc_notify(conn_handle, attr_handle);
                 fclose(fp);
-                remove("/sdcard/esp.bin");
+                remove(OTA_FILE_PATH);
                 return rc;
             }
 
@@ -171,7 +150,7 @@ gatt_svr_chr_access_sec_test(uint16_t conn_handle, uint16_t attr_handle,
                     else
                     {
                         printf("OTA size mismatch. Aborting...\n");
-                        remove("/sdcard/esp.bin");
+                        remove(OTA_FILE_PATH);
                     }
                     return rc;
                 }
