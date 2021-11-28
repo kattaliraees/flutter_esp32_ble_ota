@@ -3,13 +3,16 @@
 
 1MB OTA update time, iPhone SE 2, iOS 15 ---> 2 Minutes and 15 Seconds
 
-- One BLE Service with a Read & Writable Characteristics.
+How it works
+- One BLE Service with a Read & Writable Characteristics is created in ESP32 firmware.
 - Read will return the current running firmware version
-- Write will start receiving OTA file from the App
-- Write starts with a 5 bytes header packet
+- OTA update starts with a 5 bytes header packet
 - 5 Bytes [StartKey, OTASizeMSB, OTASizeByte, OTASizeByte, OTASizeLSB]
-- Following sending OTA bin file bytes in 512 byte writes
-- At the end send the OTA End Key
+- Following the header bytes, OTA bin file bytes will get written to ble characteristics as batches of 512 bytes
+- ESP32 firmware append this bytes to ota.bin file in SD Card
+- At the end send the OTA End Key to inform firmware OTA file sending finished
+- Firmware will verify the size with header bytes and total bytes received
+- If file size match, it will begin OTA process at firmware side
 
 
 ### Tested on
