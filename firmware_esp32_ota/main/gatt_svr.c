@@ -44,15 +44,17 @@ static uint32_t total_size = 0;
 static uint16_t counter = 0;
 static uint32_t size_of_incoming_bin = 0;
 
+//static const BLE_SERVICE_UUID = "6DD61F0E-9AEC-4C79-A62E-98910433CCC5";
+//static const BLE_CHAR_OTA_UUID = "6366C65E-37F4-4650-9AEF-5AEF56F67E1A";
 /* 59462f12-9543-9999-12c8-58b459a2712d */
 static const ble_uuid128_t gatt_svr_svc_ota_uuid =
-    BLE_UUID128_INIT(0x2d, 0x71, 0xa2, 0x59, 0xb4, 0x58, 0xc8, 0x12,
-                     0x99, 0x99, 0x43, 0x95, 0x12, 0x2f, 0x46, 0x59);
+    BLE_UUID128_INIT(0xc5, 0xcc, 0x33, 0x04, 0x91, 0x98, 0x2e, 0xa6,
+                     0x79, 0x4c, 0xec, 0x9a, 0x0e, 0x1f, 0xd6, 0x6d);
 
 /* 5c3a659e-897e-45e1-b016-007107c96df6 */
 static const ble_uuid128_t gatt_svr_chr_ota =
-    BLE_UUID128_INIT(0xf6, 0x6d, 0xc9, 0x07, 0x71, 0x00, 0x16, 0xb0,
-                     0xe1, 0x45, 0x7e, 0x89, 0x9e, 0x65, 0x3a, 0x5c);
+    BLE_UUID128_INIT(0xa1, 0x7e, 0xf6, 0x56, 0xef, 0x5a, 0xef, 0x9a,
+                     0x50, 0x46, 0xf4, 0x37, 0x5e, 0xc6, 0x66, 0x63);
 
 static int
 gatt_svr_chr_access_sec_test(uint16_t conn_handle, uint16_t attr_handle,
@@ -68,7 +70,7 @@ static const struct ble_gatt_svc_def gatt_svr_svcs[] = {
                                                            /*** Characteristic: OTA. */
                                                            .uuid = &gatt_svr_chr_ota.u,
                                                            .access_cb = gatt_svr_chr_access_sec_test,
-                                                           .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE,
+                                                           .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_WRITE | BLE_GATT_CHR_F_NOTIFY,
                                                        },
                                                        {
                                                            0, /* No more characteristics in this service. */
@@ -122,6 +124,7 @@ gatt_svr_chr_access_sec_test(uint16_t conn_handle, uint16_t attr_handle,
             FILE *fp;
             fp = fopen(OTA_FILE_PATH, "ab");
             int command_key = gatt_svr_ota_write_buffer[0];
+            printf("%d - size %d", command_key);
             if (start_receive == 0 && command_key == BLE_OTA_START_WRITE && ota_buffer_size == 5)
             {
                 start_receive = 1;

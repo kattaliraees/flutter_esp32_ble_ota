@@ -10,9 +10,8 @@ typedef BLEConnect = void Function(bool);
 enum BLEConnectionStatus { Unknown, Connecting, Connected, FailedToConnect }
 
 class BLEProvider extends ChangeNotifier {
-
   static const BLE_SERVICE_UUID = "6DD61F0E-9AEC-4C79-A62E-98910433CCC5";
-  static const BLE_CHAR_OTA_UUID = "6366C65E-37F4-4650-9AEF-5AEF56F67E1A";
+  static const BLE_CHAR_OTA_UUID = "6366C65E-37F4-4650-9AEF-5AEF56F67EA1";
   static const GATT_SVR_SVC_ALERT_UUID = '1811';
 
   //extends ChangeNotifier {
@@ -56,31 +55,25 @@ class BLEProvider extends ChangeNotifier {
               .connectToDevice(
             id: d.id,
             servicesWithCharacteristicsToDiscover: {
-              Uuid.parse(BLE_SERVICE_UUID): [
-                Uuid.parse(BLE_CHAR_OTA_UUID)
-              ]
+              Uuid.parse(BLE_SERVICE_UUID): [Uuid.parse(BLE_CHAR_OTA_UUID)]
             },
             connectionTimeout: const Duration(seconds: 2),
           )
               .listen((c) async {
             if (c.connectionState == DeviceConnectionState.connected) {
               connectionStatus = BLEConnectionStatus.Connected;
-              if (deviceID == null) {
-                foundDeviceID = d.id.toUpperCase();
+
+              final characteristic = QualifiedCharacteristic(
+                  serviceId: Uuid.parse(BLE_SERVICE_UUID),
+                  characteristicId: Uuid.parse(BLE_CHAR_OTA_UUID),
+                  deviceId: d.id);
+              foundDeviceID = d.id;
+              final response =
+                  await flutterReactiveBle.readCharacteristic(characteristic);
+              final currentFirmwareVersion = utf8.decode(response);
+              print("currentFirmwareVersion - $currentFirmwareVersion");
+              if (response.length > 0) {
                 if (!stopNotify) cb();
-              } else {
-                final characteristic = QualifiedCharacteristic(
-                    serviceId: Uuid.parse(BLE_SERVICE_UUID),
-                    characteristicId:
-                        Uuid.parse(BLE_CHAR_OTA_UUID),
-                    deviceId: d.id);
-                final response =
-                    await flutterReactiveBle.readCharacteristic(characteristic);
-                    final currentFirmwareVersion = utf8.decode(response);
-                print("currentFirmwareVersion - $currentFirmwareVersion");
-                if (response.length > 0) {
-                  if (!stopNotify) cb();
-                }
               }
             } else {
               connectionStatus = BLEConnectionStatus.FailedToConnect;
@@ -133,13 +126,14 @@ class BLEProvider extends ChangeNotifier {
       final otaDataSize = otaData.length;
       List<int> sizeBytes = [
         0x28,
+        (otaDataSize & 0xFF000000) >> 24,
         (otaDataSize & 0xFF0000) >> 16,
         (otaDataSize & 0x00FF00) >> 8,
         (otaDataSize & 0x0000FF)
       ];
       final endKey = ')';
       int start = 0;
-      final chunkSize = 514;
+      final chunkSize = 128;
       int totalRead = chunkSize;
       bool isLastChunkSent = false;
 
@@ -155,7 +149,7 @@ class BLEProvider extends ChangeNotifier {
               characteristic,
               value: endKey.codeUnits);
           print('END OF OTA WRITE');
-          print(DateTime.now().toString());  //OTA End time
+          print(DateTime.now().toString()); //OTA End time
           isOTARunning = false;
           otaProgress = 0;
           notifyListeners();
