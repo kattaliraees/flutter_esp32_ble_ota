@@ -397,6 +397,13 @@ app_main(void)
     }
 
     setup_sdmmc_interface();
+
+    while (1)
+    {
+        ESP_LOG_INFO("main task");
+        vTaskDelay(100);
+    }
+    
 }
 
 void setup_sdmmc_interface()
