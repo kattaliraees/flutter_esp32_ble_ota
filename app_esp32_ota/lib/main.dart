@@ -45,7 +45,7 @@ class MyHomePage extends StatelessWidget {
                 otaRunning = true;
                 ble.writeBytesToOTACharecteristicsWithNotify(() async {
                   await Future.delayed(
-                      Duration(seconds: 2)); //Wait for ESP32 to restart
+                      Duration(seconds: 4)); //Wait for ESP32 to restart
                   ble.scanAndConnect(() {
                     if (ble.connectionStatus == BLEConnectionStatus.Connected) {
                       otaRunning = false;
