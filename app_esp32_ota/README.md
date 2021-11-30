@@ -1,4 +1,4 @@
-# app_esp32_ota
+## ESP32 BLE OTA Flutter App
 
 Flutter App for Sending ESP32 bin file over BLE
 
