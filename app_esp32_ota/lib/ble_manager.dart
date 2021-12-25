@@ -121,6 +121,16 @@ class BLEProvider extends ChangeNotifier {
           serviceId: Uuid.parse(BLE_SERVICE_UUID),
           characteristicId: Uuid.parse(BLE_CHAR_OTA_UUID),
           deviceId: foundDeviceID!);
+      
+      if (Platform.isAndroid)
+        await flutterReactiveBle.requestConnectionPriority(
+            deviceId: foundDeviceID,
+            priority: ConnectionPriority.highPerformance);
+
+      final mtu = await flutterReactiveBle.requestMtu(
+          deviceId: foundDeviceID, mtu: 517);
+      print('Updated MTU - $mtu');
+      
 
       print(DateTime.now().toString()); //OTA Start time
       final otaDataSize = otaData.length;
